@@ -1,9 +1,25 @@
-
+close("*");
+run("Clear Results");
 inputDirectory = getDirectory("Choose a Directory of Images");
 fluoImageDirectory = inputDirectory + "fluo-4" ;
-open(fluoImageDirectory+"/output/Average.tif");
+//open(fluoImageDirectory+"/output/Average.tif");
+filelist = getFileList(fluoImageDirectory);
+setBatchMode(true);
+open(inputDirectory + File.separator + "fluo-4" + File.separator + filelist[0]);
+rename("image1")
+for (i=1; i< filelist.length; i++){
+	if(endsWith(filelist[i], ".tif")){
+		open(inputDirectory + File.separator + "fluo-4" + File.separator + filelist[i]);
+		rename("image2");
+		imageCalculator("Average create", "image1","image2");;
+		rename("image1");
+		close("\\Others");
+	}
+}
+setBatchMode(false);
 f = File.open(inputDirectory + "Results.txt");
 rename("org");
+save(inputDirectory + "\\Average.tif");
 run("Duplicate...", " ");
 rename("WholeCell");
 run("Enhance Contrast...", "saturated=0.3 normalize");
@@ -15,7 +31,7 @@ setAutoThreshold("Huang dark");
 setOption("BlackBackground", true);
 run("Convert to Mask");
 run("Median...", "radius=5");
-
+save(inputDirectory+"\\WholeCellSeg.tif");
 
 
 filelist = getFileList(inputDirectory + File.separator + "nuclei");
@@ -55,7 +71,7 @@ run("Analyze Particles...", "size=500-Infinity display clear add");
 a = nResults;		
 roiManager("show all with labels");							
 roiManager("multi-measure measure_all append");
-
+//roiManager("save", inputDirectory+"\\ROI.zip");
 for(i=0; i<a; i++)
 	print(f, (i+1)+"\t"+ getResult("Area", i)+"\t"+ 
 //		getResult("Area", i+2*a)*getResult("%Area", i+2*a)/100+"\t"+
@@ -101,7 +117,7 @@ Nuc = Array.deleteValue(Nuc, -1);
 ignoredList = Array.deleteValue(ignoredList, -1);
 roiManager("select", ignoredList);
 roiManager("delete");
-roiManager("save", fluoImageDirectory+ File.separator + "output" + File.separator +"roi.zip");
+roiManager("save", inputDirectory + File.separator +"roi.zip");
 // 		for(i=0; i<counterNuc; i++){
 //	 		roiManager("select", Nuc[i]);
 //	 		setForegroundColor(0, 255, 0);
