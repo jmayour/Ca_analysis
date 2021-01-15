@@ -1,4 +1,5 @@
-# Ca_analysis
+# Ca_analysis: 
+SECTION 1: SEGMENTATION
 1. Open ImageJ
 2. Drag the Segmenation.ijm to the ImageJ window
 3. Click "run" located at the top of the window tap
@@ -27,4 +28,26 @@ Note that: The program will obtain a mean image over all the frame of images, th
 Output.txt is the extracted intensity for all time frame images. The data is oriented as one cell data per column.
 Results.txt is segmentation results, listing the area of the cell and the area ratio of cell nucleus to whole cell.<br />
 6. You should use Excel to open the Output.txt and save it as .xlsx, before proceeding to extract physiological data.
+
+SECTION 2: ANALYSIS
+Using E2 cluster to analyze data. 
+Instructions on how to use analysis tool to analyze the "Sample data":
+1) download and decompress attached zip folder called, "Ca_package" and place in a convenient directory
+2) upload to E2 from command line (assuming you have a mac) once in the directory that contains the "Ca_package" folder using, "rsync -r Ca_package/* chXXXXXX@e2.tch.harvard.edu:/home/chXXXXXX/Ca_analysis_folder". The folder will now be on E2 in your main directory within the folder "Ca_analysis_folder"
+3) Within the Ca_analysis_folder, you will have two folders: a) Ca_analysis, which has all the MATLAB scripts (no need to touch); and b) Data, which will be the folder you will upload all your Data to.
+4) Go to the Data folder using "cd Ca_analysis_folder/Data/"
+5) For now, only the sample data set, "Sampledata" will be there. Enter the folder using "cd Sampledata/"
+6) Within the Sampledata folder, you have a Sample_data_parameters.xlsx file, a Sample_data.xlsx file, and a Sample_submitjob.sh. More details on these files and how to adjust them for your own data are below.
+7) To run the job, use, "sbatch Sample_submitjob.sh". 
+8) To check on the job, use, "squeue -l -u chXXXXXX​".
+9) Once the job is done, it will output: a) output_XXXXXX.txt, which will show the MATLAB output to make sure there were no errors in the run; b) allfigures.fig, which contains all the figures created in the script if you'd like to check on the quality of the data; c) Sample_data_Results.xlsx, which contains a summary of the results in an Excel file
+10) To copy those files back locally, in your local command line be in the folder that contains the Ca_package folder and use "rsync -r chXXXXXX@e2.tch.harvard.edu:/home/chXXXXXX/Ca_analysis_folder/* Ca_package
+
+Once you have this working, it should be pretty straightforward to do with your own data:
+1) Locally, for each experiment you'd like to be analyzed, add a folder within the "Data" subfolder of Ca_package
+2) In that folder, you will need a: 
+    - parameters.xlsx file (use the sample file as a template, and modify accordingly to meet the experimental conditions). Each row of parameters should be pretty self explanatory, no need to change the filer parameters; 
+    - data.xlsx file (which should be in the same format as the Sample_data.xlsx file and will contain all your data from the experiment); 
+    - submitjob.sh file (which is used to submit the job, and has to be adjusted for each experiment). To adjust, just change the "run_analysis('Sample_data.xlsx', 'Sample_data_parameters.xlsx')​" names to be consistent with the names of your own files 
+3) Now you should be all set! Just do the same steps now for your own data.
 
