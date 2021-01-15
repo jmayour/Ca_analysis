@@ -30,6 +30,7 @@ Results.txt is segmentation results, listing the area of the cell and the area r
 6. You should use Excel to open the Output.txt and save it as .xlsx, before proceeding to extract physiological data.
 
 SECTION 2: ANALYSIS
+
 Using E2 cluster to analyze data. 
 Instructions on how to use analysis tool to analyze the "Sample data":
 1) download and decompress attached zip folder called, "Ca_package" and place in a convenient directory
